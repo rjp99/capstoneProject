@@ -5,6 +5,7 @@ from tkinter import filedialog
 
 #set up gui window
 window = tk.Tk()
+text = tk.Label(window, text="")
 
 #function to match images
 def match_images(test):
@@ -35,17 +36,19 @@ def match_images(test):
         #if 40% similarities are found return
         if (len(matches)/len(keypoints_1) > .4):
             print('THE IMAGES ARE A MATCH')
-            text = tk.Label(window, text='The image matches Image ' + str(i+1) + '.\n' + 'Percentage Match: '+ percent)
+            text['text'] = ('The image matches Image ' + str(i+1) + '.\n' + 'Percentage Match: '+ percent)
             text.place(x=100,y=180)
             return
 
         #else go to next image
 
     #no matches
-    text = tk.Label(window, text="The images don't match")
+    text['text'] = ("The images don't match")
     text.place(x=100,y=180)
 
 def uploadFile():
+
+    text['text'] = ("")
     #upload only jpg file
     filename = filedialog.askopenfilename(title = "Select a File", filetypes = ([('Jpg Files', '*.jpg')]))
 
