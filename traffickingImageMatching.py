@@ -27,7 +27,7 @@ def match_images(test):
         bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=True)
         matches = bf.match(descriptors_1,descriptors_2)
         matches = sorted(matches, key = lambda x:x.distance)
-        percent = str((len(matches)/len(keypoints_1)) * 100)
+        percent = str(round((len(matches)/len(keypoints_1)) * 100))
 
         print('DONE\n MATCHES:', len(matches), '\n Percentage Match: ', percent)
 
@@ -77,3 +77,4 @@ def main():
     window.mainloop()
 
 main()
+#free images from: https://unsplash.com
