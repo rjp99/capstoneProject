@@ -1,7 +1,10 @@
 #imports
 import cv2
-import numpy as np
-import matplotlib.pyplot as plt
+import tkinter as tk
+from tkinter import filedialog
+
+#set up gui window
+window = tk.Tk()
 
 #function to match images
 def match_images(test):
@@ -9,7 +12,6 @@ def match_images(test):
     #for loop going through all images proven to be related to trafficking
     for i in range(9):
         #open folder with images
-        #retrieve first image
         img = cv2.imread('images/image'  + str(i+1) + '.jpg')
         print('\n\nIMAGE: '  + str(i+1))
 
@@ -17,35 +19,55 @@ def match_images(test):
         sift = cv2.SIFT_create()
         keypoints_1, descriptors_1 = sift.detectAndCompute(img,None)
         keypoints_2, descriptors_2 = sift.detectAndCompute(test,None)
-        print('IMAGE keeypoints: ', len(keypoints_1))
-        print('TEST keeypoints: ', len(keypoints_2))
+        print('IMAGE keypoints: ', len(keypoints_1))
+        print('TEST keypoints: ', len(keypoints_2))
 
+        #match the keypoints of the images
         bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=True)
-
         matches = bf.match(descriptors_1,descriptors_2)
         matches = sorted(matches, key = lambda x:x.distance)
 
-        ##COMMENT OUT IF YOU DON'T WANT TO SEE THE PLOTS
-        img3 = cv2.drawMatches(img, keypoints_1, test, keypoints_2, matches[:50], test, flags=2)
-        plt.imshow(img3),plt.show()
         print('DONE\n MATCHES:', len(matches), '\n Percentage Match: ', (len(matches)/len(keypoints_1)))
-        #return
+
         #if 40% similarities are found return
         if (len(matches)/len(keypoints_1) > .4):
             print('THE IMAGES ARE A MATCH')
+            text = tk.Label(window, text='The images are a match')
+            text.place(x=100,y=180)
             return
-            #break
+
         #else go to next image
 
+    #no matches
+    text = tk.Label(window, text="The images don't match")
+    text.place(x=100,y=180)
+
+def uploadFile():
+    #upload only jpg file
+    filename = filedialog.askopenfilename(title = "Select a File", filetypes = ([('Jpg Files', '*.jpg')]))
+
+    #match images
+    match_images(cv2.imread(filename))
+    return
+
 def main():
-    #ask user to upload image
+    #Set up gui title
+    window.title('Human Trafficking Image Matching')
+  
+    # Set window size
+    window.geometry("350x300")
+    
+    #Set window buttons and title
+    explore = tk.Label(window, text = "Human Trafficking Image Matching")
+    upload = tk.Button(window, text = "Upload Image", command = uploadFile)
+    quit = tk.Button(window, text = "Quit", command = exit)
 
-    #image = (get image)
-    test1 = cv2.imread('images/test.jpg')
-    match_images(test1)
+    #set up positions for buttons/ text
+    window.grid_rowconfigure(1, minsize=100)
+    explore.grid(column = 4, row = 1)
+    upload.grid(column = 4, row = 6)
+    quit.grid(column = 1,row = 0)
 
-    test2 = cv2.imread('images/test2.jpg')
-    match_images(test2)
-    #display result
+    window.mainloop()
 
 main()
