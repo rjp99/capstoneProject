@@ -26,13 +26,16 @@ def match_images(test):
         bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=True)
         matches = bf.match(descriptors_1,descriptors_2)
         matches = sorted(matches, key = lambda x:x.distance)
+        percent = str((len(matches)/len(keypoints_1)) * 100)
 
-        print('DONE\n MATCHES:', len(matches), '\n Percentage Match: ', (len(matches)/len(keypoints_1)))
+        print('DONE\n MATCHES:', len(matches), '\n Percentage Match: ', percent)
+
+        
 
         #if 40% similarities are found return
         if (len(matches)/len(keypoints_1) > .4):
             print('THE IMAGES ARE A MATCH')
-            text = tk.Label(window, text='The images are a match')
+            text = tk.Label(window, text='The image matches Image ' + str(i+1) + '.\n' + 'Percentage Match: '+ percent)
             text.place(x=100,y=180)
             return
 
