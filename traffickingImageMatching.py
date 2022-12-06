@@ -11,9 +11,12 @@ text = tk.Label(window, text="")
 def match_images(test):
     
     #for loop going through all images proven to be related to trafficking
-    for i in range(9):
+    bestPercent = 0.0
+    for i in range(12):
         #open folder with images
         img = cv2.imread('images/image'  + str(i+1) + '.jpg')
+
+
         print('\n\nIMAGE: '  + str(i+1))
 
         #match (using SIFT) the given image to the library images
@@ -27,23 +30,16 @@ def match_images(test):
         bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=True)
         matches = bf.match(descriptors_1,descriptors_2)
         matches = sorted(matches, key = lambda x:x.distance)
-        percent = str(round((len(matches)/len(keypoints_1)) * 100))
+        percent = round((len(matches)/len(keypoints_1)) * 100,2)
+
+        if percent > bestPercent:
+            bestPercent = percent
+            bestMatch = "Image " + str(i+1) 
 
         print('DONE\n MATCHES:', len(matches), '\n Percentage Match: ', percent)
 
-        
-
-        #if 40% similarities are found return
-        if (len(matches)/len(keypoints_1) > .4):
-            print('THE IMAGES ARE A MATCH')
-            text['text'] = ('The image matches Image ' + str(i+1) + '.\n' + 'Percentage Match: '+ percent)
-            text.place(x=100,y=180)
-            return
-
-        #else go to next image
-
-    #no matches
-    text['text'] = ("The images don't match")
+    #output
+    text['text'] = ("The best match is: " + bestMatch + " at " + str(bestPercent) + "%.")
     text.place(x=100,y=180)
 
 def uploadFile():
