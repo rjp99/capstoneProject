@@ -12,7 +12,7 @@ def match_images(test):
     
     #for loop going through all images proven to be related to trafficking
     bestPercent = 0.0
-    for i in range(12):
+    for i in range(13):
         #open folder with images
         img = cv2.imread('images/image'  + str(i+1) + '.jpg')
 
