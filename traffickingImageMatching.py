@@ -16,7 +16,6 @@ def match_images(test):
         #open folder with images
         img = cv2.imread('images/image'  + str(i+1) + '.jpg')
 
-
         print('\n\nIMAGE: '  + str(i+1))
 
         #match (using SIFT) the given image to the library images
@@ -30,7 +29,7 @@ def match_images(test):
         bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=True)
         matches = bf.match(descriptors_1,descriptors_2)
         matches = sorted(matches, key = lambda x:x.distance)
-        percent = round((len(matches)/len(keypoints_1)) * 100,2)
+        percent = round((len(matches)/len(keypoints_1)) * 100, 2)
 
         if percent > bestPercent:
             bestPercent = percent
@@ -40,7 +39,7 @@ def match_images(test):
 
     #output
     text['text'] = ("The best match is: " + bestMatch + " at " + str(bestPercent) + "%.")
-    text.place(x=100,y=180)
+    text.place(x=70,y=180)
 
 def uploadFile():
 
